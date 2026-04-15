@@ -1,2 +1,2 @@
 # DE1-project
-Projekt z predmetu DE1, tym Bagacka, Foch a Langova
+Alarm Clock - Projekt z predmetu DE1, tym Bagacka, Focher a Langova
