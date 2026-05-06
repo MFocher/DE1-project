@@ -93,7 +93,7 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 
 
 
-## Ovládání 
+## Seznam vstupů a výstupů
 <!--
 | Vstup  | Funkce                                                                                                                         |
 |--------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -175,7 +175,7 @@ Obr. 5 První část simulace pro clock_display ([tb_clock_display.vhd](https://
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Display.png" />
 
-Obr. 5 Druhá část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+Obr. 6 Druhá část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
 
@@ -213,7 +213,7 @@ Obr. 6: Simulace pro komponenty display_clock z [tb_display_top](). Zobrazení n
 
 
 ## Využití prostředků
-Obr. x: Graf využití prostředků po implementaci <img width="1572" height="792" alt="obrazek" src="Pictures/postIMP.png" />
+Obr. 7: Graf využití prostředků po implementaci <img width="1572" height="792" alt="obrazek" src="Pictures/postIMP.png" />
 
 
 ## Ostatní výstupy
