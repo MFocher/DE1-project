@@ -53,6 +53,7 @@ Signalizace je realizovaná pomocí RGB LED. Ovládá se pomocí SW[1] a BTND.
 ## Schéma zapojení:
 <img width="1227" height="656" alt="obrazek" src="Pictures/schema_5.png" />
 <!-- potřeba doplnit popisy jednotlivých komponent -->
+
 ## Popis jednotlivých komponent
 
 ### Debouncer
@@ -85,13 +86,15 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 &nbsp;&nbsp;&nbsp;&nbsp;Komponenta porovnává počet uběhlých sekund z counter_clock (hodin) s počtem sekund z counter_alarm (budíku). Při shodě těchto dvou hodnot a nařízení budíku spínačem SW[1] ve stavu '1' se aktivuje blikání RGB LED. Signalizace se vypne pomocí stistku BTND. 
 ### Display_driver
 &nbsp;&nbsp;&nbsp;&nbsp; Datových vstupů pro zobrazení času je 8, jsou 4 to hodnoty času pro jednotlivé digity hodin a stejný počet pro budík. 
+
 &nbsp;&nbsp;&nbsp;&nbsp;Anody an[3->0], zobrazují čas hodin, an[7->4] zobrazují čas nastavený na budíku.
+
 &nbsp;&nbsp;&nbsp;&nbsp;Desetinná tečka v režimu nastavování času zobrazuje právě nastavovonou digitu.
 
 
 
 ## Ovládání 
-
+<!--
 | Vstup  | Funkce                                                                                                                         |
 |--------|--------------------------------------------------------------------------------------------------------------------------------|
 | BTNC   | Přepínání mezi režimem nastavování času a odpočítáváním času                                                                   |
@@ -105,10 +108,26 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 
 | Výstup | funkce |
 |--------|--------|
-| an     |        |
-| seg    |        |
-| dp     |        |
-| led_r  |        |
+| an     | anody AN7-0       |
+| seg    |  |
+| dp     |  Ukazuje nastavovaný řád      |
+| led_r  |  Světelná signalizace budíku      |
+
+-->
+
+| Název portu | Vstup/výstup | Typ                          | Funkce                                                                                                                         |
+|-------------|--------------|------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| BTNC        | in           | std_logic                    | Přepínání mezi režimem nastavování času a odpočítáváním času                                                                   |
+| BTNR        | in           | std_logic                    | Přepínání mezi nastavovanými řády času                                                                                         |
+| BTNU        | in           | std_logic                    | Nastavovaní hodnoty na daném řádu                                                                                              |
+| BTND        | in           | std_logic                    | Vypnutí blikání RGB LED                                                                                                        |
+| SW[0]       | in           | std_logic                    | Přepínání mezi nastavováním hodin (clock) a budíku(alarm)                                                                      |
+| SW[1]       | in           | std_logic                    | Nařízení budíku, vypnuté = RGB LED nebude blikat při shodě obou časů, sepnuté - RGB LED bude při shodě nastavených časů blikat |
+| SW[15]      | in           | std_logic                    | Resetování celého systému - vynuluování hodin a budíku                                                                         |
+| an          | out          | std_logic_vector(7 downto 0) | anody AN7-0                                                                                                                    |
+| seg         | out          | std_logic_vector(7 downto 0) | {a, b - f} low active segmenty                                                                                                 |
+| dp          | out          | std_logic_vector(7 downto 0) | Signalizace právě nastavovaného číslice hodin                                                                                  |
+| led_r       | out          | std_logic                    | Světelná signalizace budíku                                                                                                    |
 
 
 ## Simulace nových komponent
@@ -152,7 +171,11 @@ Obr. 5 Simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeT
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
 
-Obr. 5 Simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+Obr. 5 První část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Display.png" />
+
+Obr. 5 Druhá část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
 
@@ -172,17 +195,17 @@ Clock_Display
 - upravená komponenta display_driver ze cvičení na jednotku zobrazující vstupní hodiny a minuty podle řádů na displej
 - nezapomenout upravit G_max na třeba 100_000 pro plynulé zobrazení (ideálně 1 kHz => 100_000_000/1000 = G_max = 100_000, zhruba 250 FPS)
  -->
-Obr. 5: Simulace pro display_clock () Zobrazení pevně daných hodnot času CLOCKu (čas 13:58) a ALARMu (čas 21:09) do zobrazení na displeji pro an[7 až 0]
-<img width="1552" height="763" alt="obrazek" src="https://github.com/user-attachments/assets/abdb42ed-63a1-4b98-8a44-7e261fa9f1bc" />
+<!-- Obr. 5: Simulace pro display_clock () Zobrazení pevně daných hodnot času CLOCKu (čas 13:58) a ALARMu (čas 21:09) do zobrazení na displeji pro an[7 až 0]
+<img width="1552" height="763" alt="obrazek" src="https://github.com/user-attachments/assets/abdb42ed-63a1-4b98-8a44-7e261fa9f1bc" /> -->
 <!--
 Counter_Alarm
 - vytvořen modul pro synchorní nastavování budíku, !!!!CO UDĚLÁ BUZZER_ON S BUZZER_OFF????
 - BTNC -> zapnutí/ vypnutí budíku
 - BTNR -> posun v řádech jednotek zprava doprava, přeskok by měl přeskočit
 - BTNU -> nastavení hodnoty na dotyčném řádu, pouze zvyšuje a při přeskoku by měla od 0 
- -->
+ 
 Obr. 6: Simulace pro komponenty display_clock z [tb_display_top](). Zobrazení nastavování podle tlačítek požadovaného budíku (13:58) a výstup pro displej
-<img width="1572" height="792" alt="obrazek" src="https://github.com/user-attachments/assets/d20b0dd4-bef2-4ae5-9949-99dd041901ce" />
+<img width="1572" height="792" alt="obrazek" src="https://github.com/user-attachments/assets/d20b0dd4-bef2-4ae5-9949-99dd041901ce" />-->
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -190,7 +213,7 @@ Obr. 6: Simulace pro komponenty display_clock z [tb_display_top](). Zobrazení n
 
 
 ## Využití prostředků
-Obr. x: Graf využití prostředků Post-implementation <img width="1572" height="792" alt="obrazek" src="https://github.com/user-attachments/assets/d20b0dd4-bef2-4ae5-9949-99dd041901ce" />
+Obr. x: Graf využití prostředků po implementaci <img width="1572" height="792" alt="obrazek" src="Pictures/postIMP.png" />
 
 
 ## Ostatní výstupy
