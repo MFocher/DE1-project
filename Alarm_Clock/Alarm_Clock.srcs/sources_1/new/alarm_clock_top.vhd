@@ -68,7 +68,6 @@ architecture Behavioral of alarm_clock_top is
     component counter_alarm is
     port (  clk     : in  std_logic;                             
             rst     : in  std_logic;                           
-            en      : in  std_logic;
 
             sw_0 : in std_logic;
             btnc_press : in std_logic;
@@ -145,14 +144,20 @@ architecture Behavioral of alarm_clock_top is
     signal sig_clk_dp_out : std_logic_vector(7 downto 0);
     signal sig_alr_dp_out : std_logic_vector(7 downto 0);
     signal sig_dp_out     : std_logic_vector(7 downto 0);
-
+    
+    signal sig_unused_sw : std_logic_vector(12 downto 0);
+    attribute dont_touch : string;
+    attribute dont_touch of sig_unused_sw : signal is "true";
+    
 begin
+    sig_unused_sw <= sw(14 downto 2);
+
     sig_dp_out <= "11111111" when sw(1) = '1' else
                          sig_clk_dp_out when sw(0) = '1' else
                          sig_alr_dp_out;
     
     gen_Hz : clk_en
-        generic map (G_max => 100000000)  --- pro desku 100_000_000, pro sim 20
+        generic map (G_max => 100_000_000)  --- pro desku 100_000_000, pro sim 20
         port map (
             clk => clk,
             rst => sw(15),
@@ -217,7 +222,7 @@ begin
         port map (
             clk     => clk,
             rst     => sw(15),
-            en => sig_cnt_en,
+
             btnu_press => sig_btnu_press,
             btnc_press => sig_btnc_press,
             btnr_press => sig_btnr_press,
@@ -271,5 +276,6 @@ begin
             dp_in => sig_dp_out,
             dp => dp
         );
-
+    
+    
 end Behavioral;

@@ -6,7 +6,6 @@ entity counter_alarm is
         port (
         clk     : in  std_logic;                             
         rst     : in  std_logic;                           
-        en      : in  std_logic;
 
         sw_0 : in std_logic;
         btnc_press : in std_logic;

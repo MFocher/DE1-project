@@ -222,8 +222,6 @@ Obr. 6: Simulace pro komponenty display_clock z [tb_display_top](). Zobrazení n
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
 ## Využití prostředků
 Obr. 7: Graf využití prostředků po implementaci <img width="1572" height="792" alt="obrazek" src="Pictures/postIMP.png" />
 
