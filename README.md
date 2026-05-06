@@ -39,9 +39,9 @@ a nebo, což se jeví ve fázi simulaci a vytváření přijatelnější, světe
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Obecný popis
-Projekt má realizovat Budík (=Alarm Clock), kde lze
-1.	Nastavit a odpočítávat ubíhající čas realizovaný pomocí modulu counter_clock
-2.	Nastavit čas, při kterém se aktivuje signalizace realizované pomocí modulů counter_alarm a compare_seconds
+Projekt má realizovat Budík (=Alarm Clock), s funkcionalitami:
+1.	Nastaviení a odpočítávání ubíhající čas - realizovano pomocí modulu counter_clock
+2.	Nastavení času budíku, při kterém se aktivuje signalizace - realizovano pomocí modulů counter_alarm a compare_seconds
 3.	Zobrazení obou časů – realizováno pomocí clock_display. Čas je zobrazován ve 24 hodinovém formátu ve tvaru Hodiny:Minuty.
 
 7-segmentové displeje jsou využity následovně: 1. část, tedy an[3->0], zobrazuje čas hodin (counter_clock) a 2. část (an[7->4]) zobrazuje budík( counter_alarm). 
@@ -51,7 +51,7 @@ Signalizace je realizovaná pomocí RGB LED. Ovládá se pomocí SW[1] a BTND.
 
 
 ## Schéma zapojení:
-<img width="1227" height="656" alt="obrazek" src="Pictures/schema3.1.png" />
+<img width="1227" height="656" alt="obrazek" src="Pictures/schema_5.png" />
 <!-- potřeba doplnit popisy jednotlivých komponent -->
 ## Popis jednotlivých komponent
 
@@ -61,7 +61,7 @@ Signalizace je realizovaná pomocí RGB LED. Ovládá se pomocí SW[1] a BTND.
 &nbsp;&nbsp;&nbsp;&nbsp;Komponenta ze cvičení, generuje signál s periodou 1s, slouží jako základ pro odpočítávání času. G_MAX je nastaveno na 100_000_000.
 ### Counter_clock 
 #### p_clock_startstop
-&nbsp;&nbsp;&nbsp;&nbsp;Proces reaguje na stisknutí tlačítka BTNC, kterým mění hodnotu sig_clock_on určující jestli hodiny ubíhají nebo ne(=nastavuje se čas)
+&nbsp;&nbsp;&nbsp;&nbsp;Proces reaguje na stisknutí tlačítka BTNC, kterým mění hodnotu sig_clock_on určující jestli hodiny ubíhají nebo ne(=nastavuje se čas).
 #### p_time_unit_edit
 &nbsp;&nbsp;&nbsp;&nbsp;Proces reaguje na stisk tlačítka btnr, počítá stisknutí (sig_time_unit) a posouvá nastavovaný řád od minut na hodiny
 #### p_clock_setting
@@ -74,16 +74,21 @@ Signalizace je realizovaná pomocí RGB LED. Ovládá se pomocí SW[1] a BTND.
 #### p_alarm_setting
 &nbsp;&nbsp;&nbsp;&nbsp;Ošetřuje pouze nastavování času ale na rozdíl od stejného procesu v counter_clock nepřičítá sekundy.
 
+&nbsp;&nbsp;&nbsp;&nbsp;Výstupem jsou opět "seconds" pro compare, "minutes" a "hours" pro display. 
+
 <!-- podobný princip jako clock ale s důležitým nastavením hodin a minut pro spouštění budíku, při porovnání s aktualním časem Clocku
 vychozí zase "seconds", "minutes" a "hours", sekundy pro porovnání, minuty a hodiny na zobrazeni 
 myšlenka: "uživatel si tlačítky asi BTNU, BTNR a BTNC zvolí čas k spuštění budíku, volí si hodiny a minuty, ty se převedou zpět na sekundy a vyvodí "seconds"  pro porovnání,
 BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchronizaci s Clockem" -->
 
 ### Seconds_compare
-&nbsp;&nbsp;&nbsp;&nbsp;Komponenta porovnává počet uběhlých sekund z counter_clock (hodin) s počtem sekund z counter_alarm (budíku). Při shodě těchto dvou hodnot se aktivuje blikání RGB LED.
+&nbsp;&nbsp;&nbsp;&nbsp;Komponenta porovnává počet uběhlých sekund z counter_clock (hodin) s počtem sekund z counter_alarm (budíku). Při shodě těchto dvou hodnot a nařízení budíku spínačem SW[1] ve stavu '1' se aktivuje blikání RGB LED. Signalizace se vypne pomocí stistku BTND. 
 ### Display_driver
-&nbsp;&nbsp;&nbsp;&nbsp; Datových vstupů je 8, jsou 4 to hodnoty času pro jednotlivé digity hodin a stejný počet pro budík. 
+&nbsp;&nbsp;&nbsp;&nbsp; Datových vstupů pro zobrazení času je 8, jsou 4 to hodnoty času pro jednotlivé digity hodin a stejný počet pro budík. 
 &nbsp;&nbsp;&nbsp;&nbsp;Anody an[3->0], zobrazují čas hodin, an[7->4] zobrazují čas nastavený na budíku.
+&nbsp;&nbsp;&nbsp;&nbsp;Desetinná tečka v režimu nastavování času zobrazuje právě nastavovonou digitu.
+
+
 
 ## Ovládání 
 
@@ -97,6 +102,13 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 | SW[1]  | Nařízení budíku, vypnuté = RGB LED nebude blikat při shodě obou časů, sepnuté - RGB LED bude při shodě nastavených časů blikat |
 | SW[15] | Resetování celého systému - vynuluování hodin a budíku                                                                         |
 
+
+| Výstup | funkce |
+|--------|--------|
+| an     |        |
+| seg    |        |
+| dp     |        |
+| led_r  |        |
 
 
 ## Simulace nových komponent
@@ -119,26 +131,48 @@ Counter_Clock
 - modul vytvořen, vystupem jsou opravdu uplynulé sekundy(CELKOVÉ sekundy pro compare!!!!!, NE zbytek sekund po přepočtu na minuty), minuty a hodiny
 - pro dosavadní testování je zvýšen sekundový čas, sig_en <= '1'; wait for 900 us; -->
   
-Obr. 2: Zobrazená simulace pro tb_counter_clock, zobrazující uplynulé sekundy, minuty a hodiny
-<img width="1649" height="812" alt="obrazek" src="https://github.com/user-attachments/assets/593b9d27-8c5c-4b3e-b080-1510a1dcb5cb" />
+<!--Obr. 2: Zobrazená simulace pro counter_clock tb_counter_clock, zobrazující uplynulé sekundy, minuty a hodiny
+<img width="1649" height="812" alt="obrazek" src="https://github.com/user-attachments/assets/593b9d27-8c5c-4b3e-b080-1510a1dcb5cb" /> -->
+
+Obr. 2 Simulace pro counter_clock ([tb_counter_clock.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_clock.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Clock_Counter.png"/>
+
+Obr. 3 Simulace pro counter_alarm ([tb_counter_alarm.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_alarm.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Alarm_Counter.png" />
+
+
+Obr. 4 Simulace pro seconds_compare ([tb_seconds_compare.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_seconds_compare.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim.Seconds_CompareUpgrade.png" />
+
+
+Obr. 5 Simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
+
+Obr. 5 Simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
 
 <!--
 Seconds_compare
 - vytvořena prvotni verze modulu pro porovnavani sekund z clocku a alarmu, s logickým vystupem 0 či 1 pro aktivaci buzzeru
 - compare porovnává, ale signál buzzeru je poslán v přesný okamžik shody -> úprava kódu přes counter, který umožní v Hz intervalech pípání buzzeru dokud není BTNC vypnut  -->
 
-Obr. 3: Odsimulování pro Alarm na 3 sekundách, Clock si postupně dopočítá a při shodě je aktivován buzzer v ustáleném bzučení a dokud není pomocí BTN_ vypnut
+<!--Obr. 3: Odsimulování pro Alarm na 3 sekundách, Clock si postupně dopočítá a při shodě je aktivován buzzer v ustáleném bzučení a dokud není pomocí BTN_ vypnut
 <img width="1637" height="449" alt="obrazek" src="https://github.com/user-attachments/assets/20fb292a-d638-4b10-8802-e97aaceefc82" />
 
-Obr. 4: Vylepšený Seconds_compare s vyřešením shody (pípnutí) na začátku a s výchozím signálem v podobě pípání v intervalech 
-<img width="1623" height="476" alt="obrazek" src="https://github.com/user-attachments/assets/15b0d6c3-9b51-431c-9eab-73306eefced8" />
+Obr. 4: Simulace pro seconds_compare z [tb_seconds_comapre](). 
+<img width="1623" height="476" alt="obrazek" src="https://github.com/user-attachments/assets/15b0d6c3-9b51-431c-9eab-73306eefced8" /> -->
 
 <!--
 Clock_Display
 - upravená komponenta display_driver ze cvičení na jednotku zobrazující vstupní hodiny a minuty podle řádů na displej
 - nezapomenout upravit G_max na třeba 100_000 pro plynulé zobrazení (ideálně 1 kHz => 100_000_000/1000 = G_max = 100_000, zhruba 250 FPS)
  -->
-Obr. 5: Zobrazení pevně daných hodnot času CLOCKu (čas 13:58) a ALARMu (čas 21:09) do zobrazení na displeji pro an[7 až 0]
+Obr. 5: Simulace pro display_clock () Zobrazení pevně daných hodnot času CLOCKu (čas 13:58) a ALARMu (čas 21:09) do zobrazení na displeji pro an[7 až 0]
 <img width="1552" height="763" alt="obrazek" src="https://github.com/user-attachments/assets/abdb42ed-63a1-4b98-8a44-7e261fa9f1bc" />
 <!--
 Counter_Alarm
@@ -147,23 +181,16 @@ Counter_Alarm
 - BTNR -> posun v řádech jednotek zprava doprava, přeskok by měl přeskočit
 - BTNU -> nastavení hodnoty na dotyčném řádu, pouze zvyšuje a při přeskoku by měla od 0 
  -->
-Obr. 6: Zobrazení nastavování podle tlačítek požadovaného budíku (13:58) a výstup pro displej
+Obr. 6: Simulace pro komponenty display_clock z [tb_display_top](). Zobrazení nastavování podle tlačítek požadovaného budíku (13:58) a výstup pro displej
 <img width="1572" height="792" alt="obrazek" src="https://github.com/user-attachments/assets/d20b0dd4-bef2-4ae5-9949-99dd041901ce" />
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-<!--
-Cv. 3.:
--
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- -->
 
 
 
 ## Využití prostředků
-
-
-## Git Flow
+Obr. x: Graf využití prostředků Post-implementation <img width="1572" height="792" alt="obrazek" src="https://github.com/user-attachments/assets/d20b0dd4-bef2-4ae5-9949-99dd041901ce" />
 
 
 ## Ostatní výstupy
