@@ -227,7 +227,7 @@ Obr. 7: Graf využití prostředků po implementaci <img width="1572" height="79
 
 
 ## Ostatní výstupy
-Plakát : 
+Plakát : <img width="1227" height="656" alt="obrazek" src="Pictures/projekt.pdf" />
 [Video](https://youtu.be/YcXsUGh_uIs)
 
 ## Zdroje a odkazy
