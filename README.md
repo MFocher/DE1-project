@@ -85,7 +85,7 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 ### Seconds_compare
 &nbsp;&nbsp;&nbsp;&nbsp;Komponenta porovnává počet uběhlých sekund z counter_clock (hodin) s počtem sekund z counter_alarm (budíku). Při shodě těchto dvou hodnot a nařízení budíku spínačem SW[1] ve stavu '1' se aktivuje blikání RGB LED. Signalizace se vypne pomocí stistku BTND. 
 ### Display_driver
-&nbsp;&nbsp;&nbsp;&nbsp; Datových vstupů pro zobrazení času je 8, jsou 4 to hodnoty času pro jednotlivé digity hodin a stejný počet pro budík. 
+&nbsp;&nbsp;&nbsp;&nbsp;Datových vstupů pro zobrazení času je 8, jsou 4 to hodnoty času pro jednotlivé digity hodin a stejný počet pro budík. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;Anody an[3->0], zobrazují čas hodin, an[7->4] zobrazují čas nastavený na budíku.
 
@@ -129,6 +129,13 @@ BTNC asi pro potvrzení a spuštění, čítač zde spíše funguje pro synchron
 | dp          | out          | std_logic_vector(7 downto 0) | Signalizace právě nastavovaného číslice hodin                                                                                  |
 | led_r       | out          | std_logic                    | Světelná signalizace budíku                                                                                                    |
 
+## Ovládání 
+&nbsp;&nbsp;&nbsp;&nbsp;Po nahrání programu na desku se inicializuje do módu nastavení času, tečka indikuje nastvovanou digitu, což bude vyšší digita hodin. Digitu inkrementujete stisknutím tlačítka "nastavení hodnoty času". Na další digitu se přepnete  pomocí "posunutí řádu". 
+&nbsp;&nbsp;&nbsp;&nbsp;Jakmile máte nastaven čas na hodinách, sepnutím SW0 se dostanete na nastavování času na budíku a stejným postupem nastavíte čas. 
+&nbsp;&nbsp;&nbsp;&nbsp; Nastavování času se ukončí stiskem BTNC, čímž se zároveň aktivuje odpočítávání času. 
+&nbsp;&nbsp;&nbsp;&nbsp;Signalizace se aktivuje nastavení SW[1] na '1'. (SW[0] v '0' čas dál běží a čas na budíku je nastaven, ale nespustí se při shodě časů signalizace). Při shodě časů začne RGB led blikat v 1s intervalu. Blikání se vypíná pomocí stisknutí BTND.
+&nbsp;&nbsp;&nbsp;&nbsp;Resetovat lze oba časy, pro reset hodin je potřeba nastavit SW[0] na '0' a následně sepnout a vypnout SW[15], analogicky se vyresetuje i budík, ale SW[0] musí být nastaven na '1'. Pro reset obou časů zároveň je potřeba sepnout SW[15] přehodit SW[0] na opačný stav a vypnout SW[15].
+
 
 ## Simulace nových komponent
 
@@ -153,25 +160,28 @@ Counter_Clock
 <!--Obr. 2: Zobrazená simulace pro counter_clock tb_counter_clock, zobrazující uplynulé sekundy, minuty a hodiny
 <img width="1649" height="812" alt="obrazek" src="https://github.com/user-attachments/assets/593b9d27-8c5c-4b3e-b080-1510a1dcb5cb" /> -->
 
-Obr. 2 Simulace pro counter_clock ([tb_counter_clock.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_clock.vhd))
+Obr. 2 Simulace pro [counter_clock](https://github.com/zeTiN123/DE1-project/blob/0af88c7881ef8e046cece8022da9438a2ee9e028/Alarm_Clock/Alarm_Clock.srcs/sources_1/new/counter_clock.vhd) ([tb_counter_clock.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_clock.vhd)) 
+
+Simulace zobrazuje inkrementaci sig_total_clock_seconds pomocí tlačítka BTNU; přepínání mezi nastavovanými řády pomocí BTNR a spuštění odpočítávání času pomocí BTNC. 
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Clock_Counter.png"/>
 
-Obr. 3 Simulace pro counter_alarm ([tb_counter_alarm.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_alarm.vhd))
+
+Obr. 3 Simulace pro [counter_alarm](https://github.com/zeTiN123/DE1-project/blob/0af88c7881ef8e046cece8022da9438a2ee9e028/Alarm_Clock/Alarm_Clock.srcs/sources_1/new/counter_alarm.vhd) ([tb_counter_alarm.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_counter_alarm.vhd))
+
+Simulace zobrazuje inkrementaci sig_total_alarm_seconds pomocí tlačítka BTNU; přepínání mezi nastavovanými řády pomocí BTNR.  
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Alarm_Counter.png" />
 
 
-Obr. 4 Simulace pro seconds_compare ([tb_seconds_compare.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_seconds_compare.vhd))
+Obr. 4 Simulace pro [seconds_compare](https://github.com/zeTiN123/DE1-project/blob/0af88c7881ef8e046cece8022da9438a2ee9e028/Alarm_Clock/Alarm_Clock.srcs/sources_1/new/seconds_compare.vhd) ([tb_seconds_compare.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_seconds_compare.vhd))
 
-<img width="1649" height="812" alt="obrazek" src="Pictures/Sim.Seconds_CompareUpgrade.png" />
+Simulace ukazuje stav při shodě hodnot s_clock a s_alarm, spuštění sig_buzzer activate, buzzer interval který určuje blikání led a následné vypnutí pomocí BNTD (signál buzzer_off).
+
+<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Compare.png.png" />
 
 
-Obr. 5 Simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
-
-<img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
-
-Obr. 5 První část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+Obr. 5 První část simulace pro [clock_display](https://github.com/zeTiN123/DE1-project/blob/0af88c7881ef8e046cece8022da9438a2ee9e028/Alarm_Clock/Alarm_Clock.srcs/sources_1/new/clock_display.vhd) ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Display.png" />
 
