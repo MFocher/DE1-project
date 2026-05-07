@@ -183,11 +183,13 @@ Simulace ukazuje stav při shodě hodnot s_clock a s_alarm, spuštění sig_buzz
 
 Obr. 5 První část simulace pro [clock_display](https://github.com/zeTiN123/DE1-project/blob/0af88c7881ef8e046cece8022da9438a2ee9e028/Alarm_Clock/Alarm_Clock.srcs/sources_1/new/clock_display.vhd) ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
 
-
+Simulace ukazuje výstup jednotlivých digitů a jejich hodnot na 7-segmentový displej.
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_Display.png" />
 
 Obr. 6 Druhá část simulace pro clock_display ([tb_clock_display.vhd](https://github.com/zeTiN123/DE1-project/blob/27c8f5caa9d6c2a3313526d3f618cbb40155fe27/Alarm_Clock/Alarm_Clock.srcs/sim_1/new/tb_clock_display.vhd))
+
+Simulace ukazuje sigánly v binárním přepisu jednotlivých digitů na anodách a multiplexování.
 
 <img width="1649" height="812" alt="obrazek" src="Pictures/Sim_DisplayAnSeg.png" />
 
@@ -232,7 +234,7 @@ Plakát : <img width="1227" height="656" alt="obrazek" src="Pictures/projekt1.3.
 
 [Video](https://youtu.be/YcXsUGh_uIs)
 
-## Zdroje a odkazy
+
 
 
 
